@@ -28,7 +28,11 @@
     <link href="assets/css/responsive.css" rel="stylesheet" type="text/css" />
 	<link href="assets/css/theme-color.css" rel="stylesheet" type="text/css" />
 	<!-- favicon -->
-    <link rel="shortcut icon" href="assets/img/favicon.ico" /> 
+	<link rel="shortcut icon" href="assets/img/favicon.ico" /> 
+	
+	 <!--Firebase Scrips-->
+	 <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js"></script>
+	 <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-database.js"></script>
 </head>
 <!-- END HEAD -->
 <body class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md header-white white-sidebar-color logo-white">
@@ -975,13 +979,13 @@
 	                                                <th class="center"> Mobile </th>
 	                                                <th class="center"> Email </th>
 	                                                <th class="center"> Address </th>
-	                                                <th class="center">Wallet Balance</th>
+	                                                <!-- <th class="center">Wallet Balance</th> -->
 	                                                <th class="center">Trips</th>
-	                                                <th class="center">Status</th>
-	                                                <th class="center"> Action </th>
+	                                                <!-- <th class="center">Status</th>
+	                                                <th class="center"> Action </th> -->
 	                                            </tr>
 	                                        </thead>
-	                                        <tbody>
+	                                        <!-- <tbody>
 												<tr class="odd gradeX">
 													<td class="user-circle-img sorting_1">
 														<img src="assets/img/user/user1.jpg" alt="">
@@ -1342,7 +1346,7 @@
 														</a>
 													</td>
 												</tr>
-											</tbody>
+											</tbody> -->
 	                                    </table>
 	                                  </div>
 	                                </div>
@@ -1592,6 +1596,70 @@
 	<script src="assets/plugins/material/material.min.js"></script>
 	<!-- animation -->
 	<script src="assets/js/pages/ui/animations.js" ></script>
-    <!-- end js include path -->
+	<!-- end js include path -->
+	
+	<script>
+		// Your web app's Firebase configuration
+		var firebaseConfig = {
+		  apiKey: "AIzaSyBPs5Eyo9b6Gz-v0Xu2ivojwtQY6Xqx8iY",
+		  authDomain: "vite-application.firebaseapp.com",
+		  databaseURL: "https://vite-application.firebaseio.com",
+		  projectId: "vite-application",
+		  storageBucket: "vite-application.appspot.com",
+		  messagingSenderId: "713446169049",
+		  appId: "1:713446169049:web:fa719d28aaf766568821c8",
+		  measurementId: "G-3F0DMYJ1D7",
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+		//firebase.analytics();
+  
+		database = firebase.database();
+  
+		var ref = database.ref("riders");
+		ref.once("value", gotData, (errData) => {
+		  console.log("Error");
+		  console.log(err);
+		});
+  
+		function gotData(data) {
+		  var drivers = data.val();
+		  var driverKeys = Object.keys(drivers);
+		  //console.log(drivers);
+		  var tableBody = "<tbody>";
+		  for (var i = 0; i < driverKeys.length; i++) {
+			var k = driverKeys[i];
+  
+			var phoneNo = drivers[k].userPhoneNumber;
+			var fullName = drivers[k].userFullName;
+			var email = drivers[k].userEmail;
+			var totalTrips = drivers[k].totalTrips;
+			var address = drivers[k].userAddress;
+			//console.log(phoneNo, fullName, email);
+			var columns = 7;
+  
+			tableBody += '<tr class="odd gradeX">';
+  
+			tableBody += '<td class="user-circle-img sorting_1">';
+			tableBody += '<img src="assets/img/user/user1.jpg" alt="" />';
+			tableBody += "</td>";
+  
+			tableBody += '<td class="center">' + fullName + "</td>";
+			tableBody += '<td class="center">' + phoneNo + "</td>";			
+			tableBody += '<td class="center">' + email + "</td>";
+			tableBody += '<td class="center">' + address + "</td>";
+			tableBody += '<td class="center">' + totalTrips + "</td>";
+			// tableBody += '<td class="center">' + missedTrips + "</td>";
+			// tableBody += '<td class="center">' + "</td>";
+  
+			tableBody += "</tr>";
+			//create table row
+		  }
+		  tableBody += "</tbody>";
+  
+		  var tableDrivers = document.getElementById("example4").innerHTML;
+		  document.getElementById("example4").innerHTML += tableBody;
+		}
+	  </script>
 </body>
 </html>
